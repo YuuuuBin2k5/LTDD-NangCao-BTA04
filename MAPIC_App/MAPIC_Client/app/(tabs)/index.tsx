@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import authService from '../../services/auth.service';
+import { useAuthViewModel } from '@/viewmodels';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { logout } = useAuthViewModel();
 
   const handleLogout = async () => {
-    await authService.logout();
+    await logout();
     router.replace('/(auth)/login');
   };
 

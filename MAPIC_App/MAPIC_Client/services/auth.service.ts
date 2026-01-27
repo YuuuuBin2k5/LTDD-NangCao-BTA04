@@ -43,15 +43,17 @@ class AuthService {
   }
 
   // Đăng xuất
-  async logout(): Promise<void> {
-    const token = await this.getToken();
+  async logout(token?: string): Promise<void> {
+    // Thử logout với API nếu có token
     if (token) {
       try {
         await apiService.post(API_ENDPOINTS.LOGOUT, {}, token);
       } catch (error) {
-        console.error('Logout error:', error);
+        console.error('Logout API error:', error);
+        // Không throw error, vẫn clear local data
       }
     }
+    // Luôn clear local data
     await this.clearAuth();
   }
 
