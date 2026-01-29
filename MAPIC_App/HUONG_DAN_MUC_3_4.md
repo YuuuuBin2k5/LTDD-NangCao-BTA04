@@ -1,7 +1,7 @@
 # HƯỚNG DẪN MỤC 3 & 4 - BÀI TẬP A03
 
-**Sinh viên:** [Tên sinh viên]  
-**MSSV:** [MSSV]  
+**Sinh viên:** Đào Nguyễn Nhật ANh
+**MSSV:** 23110073
 **Ngày:** 29/01/2026
 
 ---
