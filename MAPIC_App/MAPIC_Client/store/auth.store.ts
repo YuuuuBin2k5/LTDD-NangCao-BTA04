@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import realmService from '@/services/realm.service';
 
 interface User {
   id: string;
@@ -31,21 +32,45 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
 
-      setUser: (user) => set({ user, isAuthenticated: true }),
+      setUser: (user) => {
+        // Save to Realm
+        try {
+          realmService.saveUser(user);
+        } catch (error) {
+          console.error('Failed to save user to Realm:', error);
+        }
+        set({ user, isAuthenticated: true });
+      },
       
       setToken: (token) => set({ token }),
       
-      login: (user, token) => set({ 
-        user, 
-        token, 
-        isAuthenticated: true 
-      }),
+      login: (user, token) => {
+        // Save to Realm
+        try {
+          realmService.saveUser(user);
+        } catch (error) {
+          console.error('Failed to save user to Realm:', error);
+        }
+        set({ 
+          user, 
+          token, 
+          isAuthenticated: true 
+        });
+      },
       
-      logout: () => set({ 
-        user: null, 
-        token: null, 
-        isAuthenticated: false 
-      }),
+      logout: () => {
+        // Clear Realm data
+        try {
+          realmService.clearAllUsers();
+        } catch (error) {
+          console.error('Failed to clear Realm data:', error);
+        }
+        set({ 
+          user: null, 
+          token: null, 
+          isAuthenticated: false 
+        });
+      },
       
       setLoading: (loading) => set({ isLoading: loading }),
     }),

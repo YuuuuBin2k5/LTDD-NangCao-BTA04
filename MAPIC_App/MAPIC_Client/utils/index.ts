@@ -3,3 +3,7 @@ export * from './validation';
 export * from './format';
 export * from './storage';
 export * from './security';
+export * from './gadget';
+export * from './privacy';
+export * from './map-clustering';
+export * from './fps-monitor';

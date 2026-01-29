@@ -26,6 +26,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll() // Allow all auth endpoints
                 .requestMatchers("/api/auth/**").permitAll() // Backward compatibility
+                .requestMatchers("/api/locations/**").permitAll() // Allow location endpoints for testing
+                .requestMatchers("/api/test/**").permitAll() // Allow test endpoints
                 .anyRequest().authenticated() // Require authentication for other endpoints
             );
             

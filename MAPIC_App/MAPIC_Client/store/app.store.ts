@@ -9,6 +9,7 @@ interface AppState {
   setTheme: (theme: 'light' | 'dark' | 'auto') => void;
   setLanguage: (language: 'vi' | 'en') => void;
   setOnlineStatus: (status: boolean) => void;
+  setNetworkStatus: (status: boolean) => void; // Alias for setOnlineStatus
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -19,4 +20,5 @@ export const useAppStore = create<AppState>((set) => ({
   setTheme: (theme) => set({ theme }),
   setLanguage: (language) => set({ language }),
   setOnlineStatus: (status) => set({ isOnline: status }),
+  setNetworkStatus: (status) => set({ isOnline: status }), // Alias for setOnlineStatus
 }));
