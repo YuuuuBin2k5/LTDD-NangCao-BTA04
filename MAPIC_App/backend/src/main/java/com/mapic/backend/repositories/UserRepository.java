@@ -12,4 +12,5 @@ import java.util.Optional;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email); // Để tìm user khi đăng nhập
+    Optional<User> findByPhone(String phone); // Để tìm user theo số điện thoại
 }

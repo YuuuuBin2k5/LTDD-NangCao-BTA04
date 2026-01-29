@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,14 +12,23 @@ import {
 import { useRouter } from 'expo-router';
 import { useAuthViewModel } from '@/viewmodels';
 import { validateEmail, validateRequired } from '@/utils';
+import { useAuthStore } from '@/store/auth.store';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { login, isLoading } = useAuthViewModel();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+
+  // Redirect to home if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/(tabs)');
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async () => {
     // Validation

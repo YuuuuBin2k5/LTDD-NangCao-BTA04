@@ -19,27 +19,46 @@ const USER_KEY = 'userData';
 class AuthService {
   // Đăng ký
   async register(data: RegisterRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.REGISTER,
       data
     );
-    return response;
+    
+    // Map backend response format to client format
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 
   // Đăng nhập
   async login(data: LoginRequest): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.LOGIN,
       data
     );
 
+    // Map backend response format to client format
+    const mappedResponse: AuthResponse = {
+      status: response.success ? 'success' : 'error',
+      data: response.data ? {
+        accessToken: response.data.accessToken,
+        user: {
+          id: response.data.user.id,
+          fullName: response.data.user.fullName,
+          avatarUrl: response.data.user.avatarUrl,
+        }
+      } : undefined as any
+    };
+
     // Lưu token và user info
-    if (response.status === 'success' && response.data) {
-      await this.saveToken(response.data.accessToken);
-      await this.saveUser(response.data.user);
+    if (mappedResponse.status === 'success' && mappedResponse.data) {
+      await this.saveToken(mappedResponse.data.accessToken);
+      await this.saveUser(mappedResponse.data.user);
     }
 
-    return response;
+    return mappedResponse;
   }
 
   // Đăng xuất
@@ -91,47 +110,67 @@ class AuthService {
 
   // Quên mật khẩu - Gửi OTP
   async forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.FORGOT_PASSWORD,
       data
     );
-    return response;
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 
   // Xác thực OTP
   async verifyOtp(data: VerifyOtpRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.VERIFY_OTP,
       data
     );
-    return response;
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 
   // Đặt lại mật khẩu
   async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.RESET_PASSWORD,
       data
     );
-    return response;
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 
   // Kích hoạt tài khoản
   async activateAccount(data: ActivateRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.ACTIVATE,
       data
     );
-    return response;
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 
   // Gửi lại OTP kích hoạt
   async resendActivationOtp(data: EmailRequest): Promise<ApiResponse> {
-    const response = await apiService.post<ApiResponse>(
+    const response = await apiService.post<any>(
       API_ENDPOINTS.RESEND_ACTIVATION,
       data
     );
-    return response;
+    return {
+      status: response.success ? 'success' : 'error',
+      message: response.message,
+      data: response.data
+    };
   }
 }
 

@@ -1,8 +1,8 @@
-import { API_CONFIG, API_ENDPOINTS } from '@/constants/api';
-import { useAuthStore } from '@/store/auth.store';
-import realmService from '@/services/realm.service';
-import offlineQueueService from '@/services/offline-queue.service';
-import { useAppStore } from '@/store/app.store';
+import { API_CONFIG, API_ENDPOINTS } from "@/constants/api";
+import { useAuthStore } from "@/store/auth.store";
+import realmService from "@/services/realm.service";
+import offlineQueueService from "@/services/offline-queue.service";
+import { useAppStore } from "@/store/app.store";
 
 interface RetryConfig {
   maxRetries: number;
@@ -49,9 +49,9 @@ class HomeApiService {
 
   private addAuthHeaders(headers: HeadersInit = {}): HeadersInit {
     const token = useAuthStore.getState().token;
-    
+
     const baseHeaders: HeadersInit = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...headers,
     };
 
@@ -67,20 +67,24 @@ class HomeApiService {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     const text = await response.text();
-    
-    console.log(`[HomeAPI] Response ${response.status}:`, text.substring(0, 200));
+
+    console.log(
+      `[HomeAPI] Response ${response.status}:`,
+      text.substring(0, 200),
+    );
 
     let data: any;
     try {
       data = text ? JSON.parse(text) : {};
     } catch (e) {
-      console.error('[HomeAPI] JSON Parse Error:', text);
+      console.error("[HomeAPI] JSON Parse Error:", text);
       throw new Error(`Invalid server response: ${text.substring(0, 100)}`);
     }
 
     if (!response.ok) {
-      const errorMessage = data.message || `HTTP ${response.status}: ${response.statusText}`;
-      console.error('[HomeAPI] Error:', errorMessage);
+      const errorMessage =
+        data.message || `HTTP ${response.status}: ${response.statusText}`;
+      console.error("[HomeAPI] Error:", errorMessage);
       throw new Error(errorMessage);
     }
 
@@ -90,85 +94,103 @@ class HomeApiService {
   private calculateBackoffDelay(attempt: number, config: RetryConfig): number {
     const delay = Math.min(
       config.baseDelay * Math.pow(2, attempt),
-      config.maxDelay
+      config.maxDelay,
     );
     const jitter = Math.random() * 0.3 * delay;
     return delay + jitter;
   }
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private async requestWithRetry<T>(
     endpoint: string,
-    config: RequestConfig = {}
+    config: RequestConfig = {},
   ): Promise<T> {
     const { skipAuth, retryConfig, ...fetchConfig } = config;
     const retrySettings = { ...this.defaultRetryConfig, ...retryConfig };
-    
     const url = `${API_CONFIG.BASE_URL}${endpoint}`;
-    
-    const headers = skipAuth 
-      ? { 'Content-Type': 'application/json', ...fetchConfig.headers }
+
+    // 1. Thêm Timeout Controller
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    const headers = skipAuth
+      ? { "Content-Type": "application/json", ...fetchConfig.headers }
       : this.addAuthHeaders(fetchConfig.headers);
 
     const requestConfig: RequestInit = {
       ...fetchConfig,
       headers,
+      signal: controller.signal, // Gán signal vào fetch
     };
 
-    let lastError: Error | null = null;
+    let lastError: any = null;
 
     for (let attempt = 0; attempt <= retrySettings.maxRetries; attempt++) {
       try {
-        console.log(`[HomeAPI] Request attempt ${attempt + 1}/${retrySettings.maxRetries + 1}:`, url);
-        
+        console.log(`[HomeAPI] Request attempt ${attempt + 1}:`, url);
+
         const response = await fetch(url, requestConfig);
+        clearTimeout(timeoutId); // Xóa timeout nếu có phản hồi
         return await this.handleResponse<T>(response);
-        
       } catch (error: any) {
         lastError = error;
-        
-        if (error.message?.includes('HTTP 4') && 
-            !error.message?.includes('408') && 
-            !error.message?.includes('429')) {
-          console.error('[HomeAPI] Client error, not retrying:', error.message);
+
+        // Kiểm tra nếu là lỗi do Timeout
+        if (error.name === "AbortError") {
+          console.error("[HomeAPI] Request timed out");
+        }
+
+        // Nếu là lỗi 4xx (không phải 408/429), không nên retry
+        if (
+          error.message?.includes("HTTP 4") &&
+          !error.message?.includes("408") &&
+          !error.message?.includes("429")
+        ) {
           throw error;
         }
 
         if (attempt === retrySettings.maxRetries) {
-          console.error('[HomeAPI] Max retries reached:', error.message);
+          // Log chi tiết lỗi cuối cùng để debug
+          console.error("[HomeAPI] Max retries reached. Final Error:", error);
           throw error;
         }
 
         const delay = this.calculateBackoffDelay(attempt, retrySettings);
-        console.log(`[HomeAPI] Retrying in ${Math.round(delay)}ms...`);
         await this.sleep(delay);
       }
     }
-
-    throw lastError || new Error('Request failed');
+    throw lastError;
   }
 
   async get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
     return this.requestWithRetry<T>(endpoint, {
-      method: 'GET',
+      method: "GET",
       ...config,
     });
   }
 
-  async post<T>(endpoint: string, body?: any, config?: RequestConfig): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    body?: any,
+    config?: RequestConfig,
+  ): Promise<T> {
     return this.requestWithRetry<T>(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body),
       ...config,
     });
   }
 
-  async put<T>(endpoint: string, body?: any, config?: RequestConfig): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    body?: any,
+    config?: RequestConfig,
+  ): Promise<T> {
     return this.requestWithRetry<T>(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(body),
       ...config,
     });
@@ -176,7 +198,7 @@ class HomeApiService {
 
   async delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
     return this.requestWithRetry<T>(endpoint, {
-      method: 'DELETE',
+      method: "DELETE",
       ...config,
     });
   }
@@ -184,18 +206,18 @@ class HomeApiService {
   async getFriendsLocations(): Promise<FriendLocation[]> {
     try {
       const response = await this.get<ApiResponse<FriendLocation[]>>(
-        API_ENDPOINTS.GET_LOCATIONS
+        API_ENDPOINTS.GET_LOCATIONS,
       );
-      
+
       const locations = response.data || [];
-      
+
       this.cacheFriendsLocations(locations);
-      
+
       return locations;
     } catch (error) {
-      console.error('[HomeAPI] Failed to fetch friends locations:', error);
-      
-      console.log('[HomeAPI] Falling back to Realm cache');
+      console.error("[HomeAPI] Failed to fetch friends locations:", error);
+
+      console.log("[HomeAPI] Falling back to Realm cache");
       return this.getCachedFriendsLocations();
     }
   }
@@ -213,26 +235,26 @@ class HomeApiService {
           accuracy: 0,
         });
       });
-      console.log('[HomeAPI] Cached', locations.length, 'friend locations');
+      console.log("[HomeAPI] Cached", locations.length, "friend locations");
     } catch (error) {
-      console.error('[HomeAPI] Failed to cache locations:', error);
+      console.error("[HomeAPI] Failed to cache locations:", error);
     }
   }
 
   private getCachedFriendsLocations(): FriendLocation[] {
     try {
       const realm = realmService.getRealm();
-      const allLocations = realm.objects('Location').sorted('timestamp', true);
-      
+      const allLocations = realm.objects("Location").sorted("timestamp", true);
+
       // Group by userId and get latest location for each friend
       const latestByUser = new Map<string, FriendLocation>();
-      
+
       for (const loc of allLocations) {
         const userId = (loc as any).userId;
-        
+
         // Skip queued items and current user
-        if (userId === 'QUEUED' || !userId) continue;
-        
+        if (userId === "QUEUED" || !userId) continue;
+
         if (!latestByUser.has(userId)) {
           latestByUser.set(userId, {
             userId,
@@ -241,16 +263,20 @@ class HomeApiService {
             speed: (loc as any).speed || 0,
             heading: (loc as any).heading || 0,
             timestamp: (loc as any).timestamp,
-            status: 'stationary',
+            status: "stationary",
           });
         }
       }
-      
+
       const cached = Array.from(latestByUser.values());
-      console.log('[HomeAPI] Retrieved', cached.length, 'cached friend locations');
+      console.log(
+        "[HomeAPI] Retrieved",
+        cached.length,
+        "cached friend locations",
+      );
       return cached;
     } catch (error) {
-      console.error('[HomeAPI] Failed to get cached locations:', error);
+      console.error("[HomeAPI] Failed to get cached locations:", error);
       return [];
     }
   }
@@ -264,26 +290,23 @@ class HomeApiService {
     try {
       // Check if online
       const isOnline = useAppStore.getState().isOnline;
-      
+
       if (!isOnline) {
-        console.log('[HomeAPI] Offline, queueing location update');
+        console.log("[HomeAPI] Offline, queueing location update");
         await offlineQueueService.addToQueue(location);
         return;
       }
-      
-      await this.post<ApiResponse<void>>(
-        API_ENDPOINTS.POST_LOCATION,
-        location
-      );
-      
-      console.log('[HomeAPI] Location update sent successfully');
+
+      await this.post<ApiResponse<void>>(API_ENDPOINTS.POST_LOCATION, location);
+
+      console.log("[HomeAPI] Location update sent successfully");
     } catch (error) {
-      console.error('[HomeAPI] Failed to update location:', error);
-      
+      console.error("[HomeAPI] Failed to update location:", error);
+
       // Queue for later if network error
-      console.log('[HomeAPI] Queueing failed location update');
+      console.log("[HomeAPI] Queueing failed location update");
       await offlineQueueService.addToQueue(location);
-      
+
       throw error;
     }
   }
@@ -294,10 +317,10 @@ class HomeApiService {
    */
   async getFriendsList(): Promise<any[]> {
     try {
-      const response = await this.get<ApiResponse<any[]>>('/friends');
+      const response = await this.get<ApiResponse<any[]>>("/friends");
       return response.data || [];
     } catch (error) {
-      console.error('[HomeAPI] Failed to fetch friends list:', error);
+      console.error("[HomeAPI] Failed to fetch friends list:", error);
       throw error;
     }
   }

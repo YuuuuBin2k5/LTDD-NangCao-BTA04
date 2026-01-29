@@ -14,6 +14,16 @@ export const API_CONFIG = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
+  // Auth endpoints
+  LOGIN: '/api/v1/auth/login',
+  REGISTER: '/api/v1/auth/register',
+  LOGOUT: '/api/v1/auth/logout',
+  FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
+  VERIFY_OTP: '/api/v1/auth/verify-otp',
+  RESET_PASSWORD: '/api/v1/auth/reset-password',
+  ACTIVATE: '/api/v1/auth/activate',
+  RESEND_ACTIVATION: '/api/v1/auth/resend-activation',
+  
   // Location endpoints
   GET_LOCATIONS: '/api/locations',
   POST_LOCATION: '/api/locations',
@@ -22,6 +32,12 @@ export const API_ENDPOINTS = {
   // User endpoints
   GET_USER_PROFILE: (userId: string) => `/api/users/${userId}`,
   UPDATE_USER_PROFILE: '/api/users/me',
+  GET_CURRENT_USER: '/api/v1/users/me',
+  UPDATE_PROFILE: '/api/v1/users/profile',
+  CHANGE_PASSWORD: '/api/v1/users/password',
+  SEND_CHANGE_OTP: '/api/v1/users/send-change-otp',
+  CHANGE_EMAIL: '/api/v1/users/email',
+  CHANGE_PHONE: '/api/v1/users/phone',
   
   // Friends endpoints
   GET_FRIENDS: '/api/friends',

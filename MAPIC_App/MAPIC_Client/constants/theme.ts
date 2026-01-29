@@ -1,27 +1,71 @@
 /**
  * Theme Constants - Doraemon Inspired Design System
- * Color palette, typography, spacing, and effects for MAPIC
+ * Modern, sophisticated design with space-themed aesthetics
  */
 
-// Doraemon Color Palette
+// Doraemon Space Theme Color Palette
 export const colors = {
-  // Primary Doraemon Theme Colors
-  cream: '#FFF8E7',        // Đất (Land)
-  matchaGreen: '#B8D4A8',  // Cây cối (Vegetation)
-  babyBlue: '#A8D8EA',     // Nước (Water)
-  lightLavender: '#E8D5F2', // UI elements
+  // Primary Brand Colors (Doraemon Theme)
+  primary: '#3A86FF',        // Doraemon Blue - Main brand color
+  background: '#0B2545',     // Deep Space Blue - Dark mode background
+  action: '#FF0022',         // Red Bow - Call-to-action buttons
+  accent: '#FFD60A',         // Yellow Bell - Highlights and stars
+  sub: '#8338EC',           // Purple Notes - Gradients and hover effects
+  light: '#EEF4ED',         // Cloud White - Text and card backgrounds
   
-  // Doraemon Character Colors
-  doraemonBlue: '#0095D9',
-  doraemonRed: '#E60012',
-  doraemonYellow: '#FFD700',
+  // Legacy Doraemon Colors (for backward compatibility)
+  cream: '#FFF8E7',
+  matchaGreen: '#B8D4A8',
+  babyBlue: '#A8D8EA',
+  lightLavender: '#E8D5F2',
+  doraemonBlue: '#3A86FF',
+  doraemonRed: '#FF0022',
+  doraemonYellow: '#FFD60A',
   doraemonWhite: '#FFFFFF',
+  lightBlue: '#E3F2FD',
+  
+  // Gradient Colors
+  gradient: {
+    space: ['#0B2545', '#3A86FF'],      // Deep space to bright blue
+    cosmic: ['#8338EC', '#3A86FF'],     // Purple to blue
+    sunset: ['#FF0022', '#FFD60A'],     // Red to yellow
+    aurora: ['#3A86FF', '#8338EC', '#FFD60A'], // Multi-color aurora
+  },
+  
+  // Page-specific Background Colors (Creative blends)
+  pageBackground: {
+    // Home/Map: Deep ocean blue with cosmic purple hints
+    home: '#0D2B52',        // Blend: 80% #0B2545 + 20% #8338EC
+    
+    // Chat: Warm twilight purple with blue undertones  
+    chat: '#4A2B7A',        // Blend: 60% #8338EC + 30% #0B2545 + 10% #3A86FF
+    
+    // Friends: Vibrant cosmic blue with purple energy
+    friends: '#2A5B9E',     // Blend: 50% #3A86FF + 40% #0B2545 + 10% #8338EC
+    
+    // Settings: Rich midnight blue with purple mystique
+    settings: '#1A3A6B',    // Blend: 60% #0B2545 + 30% #3A86FF + 10% #8338EC
+    
+    // Profile/Edit: Elegant deep purple with blue sophistication
+    profile: '#3B2668',     // Blend: 70% #8338EC + 20% #0B2545 + 10% #3A86FF
+    
+    // Auth screens: Serene deep blue with subtle purple
+    auth: '#0F2E5A',        // Blend: 75% #0B2545 + 20% #3A86FF + 5% #8338EC
+  },
+  
+  // Glassmorphism Colors
+  glass: {
+    light: 'rgba(238, 244, 237, 0.2)',   // Light glass with 20% opacity
+    medium: 'rgba(238, 244, 237, 0.3)',  // Medium glass with 30% opacity
+    dark: 'rgba(11, 37, 69, 0.5)',       // Dark glass with 50% opacity
+    blur: 'rgba(255, 255, 255, 0.1)',    // Subtle blur effect
+  },
   
   // Functional Colors
   success: '#4CAF50',
-  warning: '#FF9800',
-  error: '#F44336',
-  info: '#2196F3',
+  warning: '#FFD60A',
+  error: '#FF0022',
+  info: '#3A86FF',
   
   // Neutral Colors
   white: '#FFFFFF',
@@ -42,7 +86,7 @@ export const colors = {
     900: '#212121',
   },
   
-  // Opacity variants for glassmorphism
+  // Opacity variants
   opacity: {
     glass: 'rgba(255, 255, 255, 0.7)',
     overlay: 'rgba(0, 0, 0, 0.5)',
@@ -50,13 +94,14 @@ export const colors = {
   }
 };
 
-// Typography
+// Typography - Modern Sans-serif
 export const typography = {
   fontFamily: {
     regular: 'System',
     medium: 'System-Medium',
     bold: 'System-Bold',
     semibold: 'System-Semibold',
+    // Recommended: Montserrat or Quicksand for production
   },
   
   fontSize: {
@@ -104,19 +149,19 @@ export const spacing = {
   24: 96,
 };
 
-// Border Radius
+// Border Radius - Rounded corners for friendly feel
 export const borderRadius = {
   none: 0,
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
-  '2xl': 20,
-  '3xl': 24,
+  sm: 8,      // Increased for more rounded feel
+  md: 12,
+  lg: 16,
+  xl: 20,
+  '2xl': 24,
+  '3xl': 32,
   full: 9999,
 };
 
-// Shadows (iOS and Android compatible)
+// Shadows - Enhanced for depth
 export const shadows = {
   none: {
     shadowColor: 'transparent',
@@ -128,51 +173,71 @@ export const shadows = {
   
   sm: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.0,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   
   md: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
     elevation: 4,
   },
   
   lg: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.30,
-    shadowRadius: 4.65,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
     elevation: 8,
   },
   
   xl: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
     elevation: 12,
+  },
+  
+  // Glow effect for accent elements
+  glow: {
+    shadowColor: '#3A86FF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 5,
   },
 };
 
-// Glassmorphism Effect
+// Glassmorphism Effect - Modern frosted glass look
 export const glassmorphism = {
   light: {
-    backgroundColor: colors.opacity.glass,
+    backgroundColor: colors.glass.light,
     borderRadius: borderRadius['2xl'],
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
     ...shadows.md,
-    // Note: backdropFilter not supported in React Native
-    // Use BlurView component instead
+    // Note: Use BlurView component for actual blur effect
+  },
+  
+  medium: {
+    backgroundColor: colors.glass.medium,
+    borderRadius: borderRadius['2xl'],
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    ...shadows.lg,
   },
   
   dark: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: colors.glass.dark,
     borderRadius: borderRadius['2xl'],
-    ...shadows.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    ...shadows.xl,
   },
 };
 
@@ -212,7 +277,7 @@ export const breakpoints = {
   xl: 1280,
 };
 
-// Icon Sizes
+// Icon Sizes - Rounded style
 export const iconSize = {
   xs: 16,
   sm: 20,
@@ -222,7 +287,7 @@ export const iconSize = {
   '2xl': 48,
 };
 
-// Avatar Sizes
+// Avatar Sizes - Circular
 export const avatarSize = {
   xs: 24,
   sm: 32,
@@ -232,12 +297,12 @@ export const avatarSize = {
   '2xl': 80,
 };
 
-// Button Heights
+// Button Heights - Rounded
 export const buttonHeight = {
-  sm: 32,
-  md: 40,
-  lg: 48,
-  xl: 56,
+  sm: 36,
+  md: 44,
+  lg: 52,
+  xl: 60,
 };
 
 // Map Specific Constants
@@ -245,8 +310,8 @@ export const mapTheme = {
   defaultZoom: 15,
   minZoom: 3,
   maxZoom: 20,
-  cameraTilt: 12, // degrees for 3D effect
-  clusterThreshold: 10, // Start clustering when > 10 markers
+  cameraTilt: 12,
+  clusterThreshold: 10,
 };
 
 // Export default theme object
@@ -268,3 +333,4 @@ export const theme = {
 };
 
 export default theme;
+

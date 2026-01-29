@@ -43,4 +43,9 @@ public interface OtpRepository extends JpaRepository<OtpCode, Long> {
     @Transactional
     @Query("UPDATE OtpCode o SET o.isUsed = true, o.usedAt = :now WHERE o.userEmail = :email AND o.otpType = :type AND o.isUsed = false")
     void invalidateOldOtps(@Param("email") String email, @Param("type") OtpType type, @Param("now") LocalDateTime now);
+
+    // Delete OTP by email and type
+    @Modifying
+    @Transactional
+    void deleteByUserEmailAndOtpType(String userEmail, OtpType otpType);
 }

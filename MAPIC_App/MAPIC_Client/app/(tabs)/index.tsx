@@ -1,14 +1,20 @@
-import { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, Platform } from 'react-native';
-import MapView, { Region } from 'react-native-maps';
-import * as Location from 'expo-location';
-import { useLocationStore } from '@/store/location.store';
-import { useFriendsStore } from '@/store/friends.store';
-import { defaultRegion } from '@/constants/mapStyle';
-import { colors, spacing } from '@/constants/theme';
-import BottomBar from '@/components/navigation/BottomBar';
-import FriendAvatar from '@/components/map/FriendAvatar';
-import AppLogo from '@/components/branding/AppLogo';
+import { useEffect, useState, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  Platform,
+} from "react-native";
+import MapView, { Region } from "react-native-maps";
+import * as Location from "expo-location";
+import { useLocationStore } from "@/store/location.store";
+import { useFriendsStore } from "@/store/friends.store";
+import { defaultRegion } from "@/constants/mapStyle";
+import { colors, spacing } from "@/constants/theme";
+import BottomBar from "@/components/ui/BottomBar";
+import FriendAvatar from "@/components/map/FriendAvatar";
+import AppLogo from "@/components/branding/AppLogo";
 
 export default function HomeScreen() {
   const mapRef = useRef<MapView>(null);
@@ -19,13 +25,15 @@ export default function HomeScreen() {
   const userLocation = useLocationStore((state) => state.currentLocation);
   const startTracking = useLocationStore((state) => state.startTracking);
   const stopTracking = useLocationStore((state) => state.stopTracking);
-  
-  const fetchFriendsLocations = useFriendsStore((state) => state.fetchFriendsLocations);
+
+  const fetchFriendsLocations = useFriendsStore(
+    (state) => state.fetchFriendsLocations,
+  );
   const friendsLocations = useFriendsStore((state) => state.friendsLocations);
 
   useEffect(() => {
     initializeLocation();
-    
+
     return () => {
       stopTracking();
     };
@@ -55,15 +63,15 @@ export default function HomeScreen() {
   const initializeLocation = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      
-      if (status !== 'granted') {
-        setError('Location permission denied');
+
+      if (status !== "granted") {
+        setError("Location permission denied");
         setIsLoading(false);
         return;
       }
 
       await startTracking();
-      
+
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
@@ -74,12 +82,12 @@ export default function HomeScreen() {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       };
-      
+
       setMapRegion(initialRegion);
       setIsLoading(false);
     } catch (err) {
-      console.error('Location initialization error:', err);
-      setError('Failed to get location');
+      console.error("Location initialization error:", err);
+      setError("Failed to get location");
       setIsLoading(false);
     }
   };
@@ -97,11 +105,11 @@ export default function HomeScreen() {
   };
 
   const handleChatPress = () => {
-    console.log('Navigate to chat');
+    console.log("Navigate to chat");
   };
 
   const handleFriendsPress = () => {
-    console.log('Navigate to friends');
+    console.log("Navigate to friends");
   };
 
   if (isLoading) {
@@ -117,7 +125,9 @@ export default function HomeScreen() {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>{error}</Text>
-        <Text style={styles.errorSubtext}>Please enable location permissions</Text>
+        <Text style={styles.errorSubtext}>
+          Please enable location permissions
+        </Text>
       </View>
     );
   }
@@ -154,11 +164,9 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.debugInfo}>
+        <Text style={styles.debugText}>Friends: {friendsLocations.length}</Text>
         <Text style={styles.debugText}>
-          Friends: {friendsLocations.length}
-        </Text>
-        <Text style={styles.debugText}>
-          Location: {userLocation ? '✓' : '✗'}
+          Location: {userLocation ? "✓" : "✗"}
         </Text>
       </View>
 
@@ -180,8 +188,8 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: colors.cream,
   },
   loadingText: {
@@ -191,40 +199,40 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: colors.cream,
     padding: spacing[6],
   },
   errorText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.error,
     marginBottom: spacing[2],
-    textAlign: 'center',
+    textAlign: "center",
   },
   errorSubtext: {
     fontSize: 14,
     color: colors.gray[600],
-    textAlign: 'center',
+    textAlign: "center",
   },
   logoContainer: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 60 : 50,
+    position: "absolute",
+    top: Platform.OS === "ios" ? 60 : 50,
     left: 16,
     zIndex: 10,
   },
   debugInfo: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 60 : 50,
+    position: "absolute",
+    top: Platform.OS === "ios" ? 60 : 50,
     right: 16,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: "rgba(0,0,0,0.7)",
     padding: 10,
     borderRadius: 8,
     zIndex: 10,
   },
   debugText: {
-    color: 'white',
+    color: "white",
     fontSize: 12,
     marginBottom: 4,
   },

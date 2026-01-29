@@ -98,4 +98,51 @@ public class OtpService {
     public void cleanupExpiredOtps() {
         otpRepository.deleteByExpiresAtBefore(LocalDateTime.now());
     }
+
+    /**
+     * Generate OTP (without sending email - for phone OTP)
+     * Returns the OTP code for manual sending via SMS
+     */
+    public String generateOtp(String identifier, OtpType otpType) {
+        // Rate limiting check
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+        int otpCount = otpRepository.countByUserEmailAndCreatedAtAfter(identifier, oneHourAgo);
+        
+        if (otpCount >= MAX_OTP_PER_HOUR) {
+            throw new RuntimeException("Đã vượt quá giới hạn gửi OTP. Vui lòng thử lại sau 1 giờ.");
+        }
+        
+        // Invalidate old OTPs
+        otpRepository.invalidateOldOtps(identifier, otpType, LocalDateTime.now());
+        
+        // Generate OTP code
+        String otpCode = generateOtpCode();
+        
+        // Create OTP entity
+        OtpCode otp = new OtpCode();
+        otp.setUserEmail(identifier); // Can be email or phone
+        otp.setOtpCode(otpCode);
+        otp.setOtpType(otpType);
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
+        
+        // Save to database
+        otpRepository.save(otp);
+        
+        // Log OTP for testing
+        System.out.println("=== OTP GENERATED ===");
+        System.out.println("Identifier: " + identifier);
+        System.out.println("OTP Code: " + otpCode);
+        System.out.println("Type: " + otpType);
+        System.out.println("Expires: " + otp.getExpiresAt());
+        System.out.println("====================");
+        
+        return otpCode;
+    }
+    
+    /**
+     * Delete OTP after successful verification
+     */
+    public void deleteOtp(String identifier, OtpType otpType) {
+        otpRepository.deleteByUserEmailAndOtpType(identifier, otpType);
+    }
 }
