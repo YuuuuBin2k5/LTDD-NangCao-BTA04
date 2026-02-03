@@ -496,8 +496,10 @@ const styles = StyleSheet.create({
   avatarSection: {
     alignItems: 'center',
     paddingVertical: spacing[8],
-    backgroundColor: colors.white,
+    backgroundColor: colors.cardBackground.nebulaCloud, // Nebula cloud
     marginBottom: spacing[4],
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder.purple,
   },
   avatarContainer: {
     position: 'relative',
@@ -539,38 +541,42 @@ const styles = StyleSheet.create({
     color: colors.gray[600],
   },
   section: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.cardBackground.mysticPurple, // Mystic purple glass
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[4],
     marginBottom: spacing[4],
+    borderWidth: 1.5,
+    borderColor: colors.cardBorder.purple,
+    marginHorizontal: spacing[2],
+    borderRadius: 16,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.gray[900],
+    color: colors.white, // White text
     marginBottom: spacing[2],
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: colors.gray[600],
+    color: colors.light, // Light text
     marginBottom: spacing[4],
   },
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: colors.gray[700],
+    color: colors.light, // Light text
     marginBottom: spacing[2],
     marginTop: spacing[3],
   },
   input: {
     height: 50,
-    borderWidth: 1,
-    borderColor: colors.gray[300],
+    borderWidth: 1.5,
+    borderColor: colors.cardBorder.white,
     borderRadius: 12,
     paddingHorizontal: spacing[4],
     fontSize: 16,
-    color: colors.gray[900],
-    backgroundColor: colors.white,
+    color: colors.white, // White text
+    backgroundColor: colors.cardBackground.deepSpace, // Deep space input
   },
   inputWithButton: {
     flexDirection: 'row',

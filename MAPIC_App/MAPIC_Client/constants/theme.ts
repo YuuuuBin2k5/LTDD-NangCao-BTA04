@@ -61,6 +61,41 @@ export const colors = {
     blur: 'rgba(255, 255, 255, 0.1)',    // Subtle blur effect
   },
   
+  // Creative Card/Section Backgrounds (Glassmorphism with color tints)
+  cardBackground: {
+    // Frosted blue glass - Cool and modern
+    frostedBlue: 'rgba(58, 134, 255, 0.15)',      // Primary blue tint
+    
+    // Mystic purple glass - Elegant and mysterious
+    mysticPurple: 'rgba(131, 56, 236, 0.18)',     // Purple tint
+    
+    // Cosmic blend - Multi-dimensional
+    cosmicBlend: 'rgba(88, 95, 200, 0.2)',        // Blue + Purple blend
+    
+    // Aurora glow - Vibrant and energetic
+    auroraGlow: 'rgba(100, 120, 255, 0.22)',      // Bright blue-purple
+    
+    // Deep space - Sophisticated and deep
+    deepSpace: 'rgba(20, 50, 90, 0.4)',           // Dark blue tint
+    
+    // Twilight mist - Soft and dreamy
+    twilightMist: 'rgba(70, 80, 150, 0.25)',      // Muted blue-purple
+    
+    // Nebula cloud - Ethereal and floating
+    nebulaCloud: 'rgba(110, 90, 180, 0.2)',       // Purple-blue cloud
+    
+    // Starlight - Bright and shimmering
+    starlight: 'rgba(150, 170, 255, 0.18)',       // Light blue shimmer
+  },
+  
+  // Card Border Colors (Subtle glows)
+  cardBorder: {
+    blue: 'rgba(58, 134, 255, 0.3)',
+    purple: 'rgba(131, 56, 236, 0.3)',
+    white: 'rgba(255, 255, 255, 0.2)',
+    gold: 'rgba(255, 214, 10, 0.3)',
+  },
+  
   // Functional Colors
   success: '#4CAF50',
   warning: '#FFD60A',

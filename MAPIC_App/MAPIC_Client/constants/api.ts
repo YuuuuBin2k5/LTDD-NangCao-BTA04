@@ -45,6 +45,17 @@ export const API_ENDPOINTS = {
   SEND_FRIEND_REQUEST: '/api/friends/requests',
   ACCEPT_FRIEND_REQUEST: (requestId: string) => `/api/friends/requests/${requestId}/accept`,
   REJECT_FRIEND_REQUEST: (requestId: string) => `/api/friends/requests/${requestId}/reject`,
+  SEARCH_FRIENDS: '/api/v1/friends/search',
+  GET_FRIENDS_LIST: '/api/v1/friends/list',
+  GET_FRIEND_PROFILE: (friendId: number) => `/api/v1/friends/${friendId}/profile`,
+  ADD_FRIEND: '/api/v1/friends/add',
+  ACCEPT_FRIENDSHIP: (friendshipId: number) => `/api/v1/friends/${friendshipId}/accept`,
+  REMOVE_FRIEND: (friendId: number) => `/api/v1/friends/${friendId}`,
+  
+  // Places endpoints
+  SEARCH_PLACES: '/api/v1/places/search',
+  GET_NEARBY_PLACES: '/api/v1/places/nearby',
+  GET_PLACE_DETAIL: (placeId: number) => `/api/v1/places/${placeId}`,
   
   // Chat endpoints (future)
   GET_CHATS: '/api/chats',

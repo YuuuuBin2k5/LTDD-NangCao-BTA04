@@ -118,7 +118,16 @@ class OfflineQueueService {
         .filtered('userId == "QUEUED"')
         .sorted('timestamp', false);
       
-      return Array.from(queued);
+      // Convert to plain objects to avoid Realm invalidation issues
+      return queued.map(item => ({
+        _id: item._id,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        speed: item.speed,
+        heading: item.heading,
+        accuracy: item.accuracy,
+        timestamp: item.timestamp,
+      }));
     } catch (error) {
       // Realm not initialized yet, return empty array
       console.log('[OfflineQueue] Failed to get queued updates:', error);

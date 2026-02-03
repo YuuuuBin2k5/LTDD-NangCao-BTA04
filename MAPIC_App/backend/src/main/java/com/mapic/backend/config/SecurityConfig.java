@@ -24,12 +24,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll() // Allow all auth endpoints
-                .requestMatchers("/api/auth/**").permitAll() // Backward compatibility
-                .requestMatchers("/api/locations/**").permitAll() // Allow location endpoints for testing
-                .requestMatchers("/api/test/**").permitAll() // Allow test endpoints
-                .requestMatchers("/api/v1/users/**").permitAll() // TEMPORARY: Allow user endpoints for testing
-                .anyRequest().authenticated() // Require authentication for other endpoints
+                .anyRequest().permitAll() // TEMPORARY: Allow all requests for development
             );
             
         return http.build();

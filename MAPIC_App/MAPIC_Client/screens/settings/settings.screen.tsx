@@ -278,13 +278,13 @@ const styles = StyleSheet.create({
   profileCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.glass.medium,
+    backgroundColor: colors.cardBackground.cosmicBlend, // Cosmic blend glass
     marginHorizontal: spacing[4],
     marginTop: spacing[2],
     padding: spacing[4],
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1.5,
+    borderColor: colors.cardBorder.blue,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -343,11 +343,11 @@ const styles = StyleSheet.create({
     marginHorizontal: spacing[4],
   },
   sectionContent: {
-    backgroundColor: colors.glass.medium,
+    backgroundColor: colors.cardBackground.twilightMist, // Twilight mist glass
     marginHorizontal: spacing[4],
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1.5,
+    borderColor: colors.cardBorder.purple,
     overflow: "hidden",
   },
   settingItem: {
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.glass.medium,
+    backgroundColor: colors.cardBackground.deepSpace, // Deep space glass
     marginHorizontal: spacing[4],
     marginTop: spacing[6],
     marginBottom: spacing[4],
